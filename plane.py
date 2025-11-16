@@ -14,7 +14,7 @@ class Plane(BaseModel):
     client_host: str
     client_port: int
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         """Method for printing plane info for debugging purposes"""
         return f"Plane {self.plane_id} \nCurrent position: \nX: {self.x_pos}\nY: {self.y_pos} \nZ: {self.z_pos} \n Fuel left: {self.fuel_left} \nLanded: {self.is_landed}"
 

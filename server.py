@@ -9,7 +9,7 @@ class Server(BaseModel):
     server_host: str
     server_port: int
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"Server is running for {datetime.now() - self.server_start_time} with the following configuration: \nHOST: {self.server_host} \nPORT: {self.server_port}"
 
     def start_server(self):
