@@ -5,13 +5,14 @@ from errno import EPIPE
 
 
 class Server(BaseModel):
-    host: str
-    port: int
+    server_start_time: datetime = datetime.now()
+    server_host: str
+    server_port: int
 
-    def __init__(self, host: str, port: int):
-        self.server_start_time = datetime.now()
-        self.server_host = host
-        self.server_port = port
+    # def __init__(self, host: str, port: int):
+    #     self.server_start_time = datetime.now()
+    #     self.server_host = host
+    #     self.server_port = port
 
     def __repr__(self):
         return f"Server is running for {datetime.now() - self.server_start_time} with the following configuration: \nHOST: {self.server_host} \nPORT: {self.server_port}"
@@ -31,14 +32,14 @@ class Server(BaseModel):
                     # TODO Do something with each connected client (plane)
 
                     ## OLD:
-                    # rec_mess = conn.recv(1024).decode("utf-8")
-                    # if not rec_mess:
-                        # break
+                    rec_mess = conn.recv(1024).decode("utf-8")
+                    if not rec_mess:
+                        break
 
-                    try:
-                        pass
+                    # try:
+                    #     pass
 
-                    except IOError as e:
-                        if e.errno == EPIPE:
-                            print("[ERROR] Broken pipe error")
-                            break
+                    # except IOError as e:
+                    #     if e.errno == EPIPE:
+                    #         print("[ERROR] Broken pipe error")
+                    #         break
