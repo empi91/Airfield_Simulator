@@ -1,7 +1,10 @@
 from datetime import datetime
-from connection import Connection
-from pydantic import BaseModel
 from errno import EPIPE
+
+from pydantic import BaseModel
+
+from config import config
+from connection import Connection
 
 
 class Server(BaseModel):
@@ -17,7 +20,7 @@ class Server(BaseModel):
         connection = Connection()
         with connection.create_connection(is_server=True) as s:
             s.bind((self.server_host, self.server_port))
-            s.listen(100)
+            s.listen(config.network.max_connections)
             print("Server online")  # ADDFEATURE add it to logging
             print(f"Server: {self}")
 
