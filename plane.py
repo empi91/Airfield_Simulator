@@ -1,7 +1,11 @@
-from uuid import UUID, uuid4
-from pydantic import BaseModel, Field
-from connection import Connection
 from random import randint
+from time import sleep
+from uuid import UUID, uuid4
+
+from pydantic import BaseModel, Field
+
+from config import config
+from connection import Connection
 
 
 class Plane(BaseModel):
@@ -20,14 +24,23 @@ class Plane(BaseModel):
 
     def start_plane(self):
         """
-        Creating new plane (connection) to server and checking plane parameters
+        Creating new plane (connection) to server and checking plane parameters.
+        Adding newly crated plane to database.
         """
         connection = Connection()
         with connection.create_connection() as s:
             s.connect((self.client_host, self.client_port))
             print(f"Plane connected: {self}")  # ADDFEATURE Add to logging
 
+    def move_plane(self):
+        """Moving plane in 3D space, using fuel and avoiding colisions (#TODO)"""
+
 
 if __name__ == "__main__":
-    plane = Plane(client_host="127.0.0.1", client_port=65432)
+    plane = Plane(client_host=config.network.host, client_port=config.network.port)
     plane.start_plane()
+    while True:
+        plane.move_plane()
+        plane.fuel_left -= 1
+        print(plane)
+        sleep(1)
