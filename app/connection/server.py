@@ -3,8 +3,8 @@ from errno import EPIPE
 
 from pydantic import BaseModel
 
-from config import config
-from connection import Connection
+from app.config.config import config
+from app.connection.connection import Connection
 
 
 class Server(BaseModel):

@@ -1,8 +1,9 @@
 # from time import sleep
 
-from config import config
+from app.config.config import config
+
 # from plane import Plane
-from server import Server
+from app.connection.server import Server
 
 
 def main():
