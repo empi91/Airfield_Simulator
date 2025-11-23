@@ -14,24 +14,29 @@ class Plane(BaseModel):
     Each plane has an unique ID
     Each plane arrives in random area, on the height between 2 and 5km
     Each plane arrives with full fuel tank. 
+    """
+    plane_id: UUID = Field(default_factory=uuid4, frozen=True) # BUG Apply uuid properly working with different types of database (probably to be implemented in SQLAlchemy model)
+    x_pos: int = Field(default_factory=lambda: randint(0, 10000))
+    y_pos: int = Field(default_factory=lambda: randint(0, 10000))
+    z_pos: int = Field(default_factory=lambda: randint(2000, 5000))
+    fuel_left: int = 1000
+    is_landed: bool = False
+
+class PlaneController():
+    """Operation logic behind Plane class object behaviour
     Average fuel consumption: #TODO
     Average plane speed: #TODO
     """
-    plane_id: UUID = Field(default_factory=uuid4, frozen=True)
-    x_pos: int = randint(0, 10000)
-    y_pos: int = randint(0, 10000)
-    z_pos: int = randint(2000, 5000)
-    fuel_left: int = 1000
-    is_landed: bool = False
-    # client_host: str
-    # client_port: int
 
-class PlaneController():
-    """Operation logic behind Plane class object behaviour"""
-
-    def __init__(self):
+    def __init__(self, plane: Plane):
         """Generating new plane"""
         self.database = Database()
+        self.plane_id = plane.plane_id
+        self.x_pos = plane.x_pos
+        self.y_pos = plane.y_pos
+        self.z_pos = plane.z_pos
+        self.fuel_left = plane.fuel_left
+        self.is_landed = plane.is_landed
 
 
     def __repr__(self) -> str:
