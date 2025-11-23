@@ -18,7 +18,7 @@ class DatabaseConfig(BaseSettings):
     # db_password: str
     db_host: str = "localhost"
     db_port: int = 5432
-    database_url: str = ""
+    database_engine: str = "sqlite:///test_db.db"
 
     model_config = SettingsConfigDict(
         env_prefix="DB_",
@@ -37,7 +37,7 @@ class AppConfig(BaseSettings):
     )
 
     network: NetworkConfig = Field(default_factory=NetworkConfig)
-    # database: DatabaseConfig = Field(default_factory=DatabaseConfig)
+    database: DatabaseConfig = Field(default_factory=DatabaseConfig)
 
 
 
