@@ -1,7 +1,9 @@
-"""SQLAlchemy models module for database entities."""
+"""SQLAlchemy models module for database entities.
 
-# When you add SQLAlchemy models, import them here
-# Example: from app.models.plane_model import PlaneModel
+Note: The Plane class here is the SQLAlchemy ORM model for database operations.
+For the Pydantic schema used in business logic, see app.schemas.Plane.
+"""
 
-__all__ = []
+from app.models.plane_model import Base, Plane
 
+__all__ = ["Base", "Plane"]

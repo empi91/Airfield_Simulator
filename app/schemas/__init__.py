@@ -4,3 +4,4 @@ from app.schemas.plane_schema import Plane
 
 __all__ = ["Plane"]
 
+

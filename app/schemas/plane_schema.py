@@ -6,23 +6,26 @@ from pydantic import BaseModel, Field
 
 from app.config.config import config
 from app.connection import Connection
-from app.database import Database
 
 
 class Plane(BaseModel):
     """New plane pydantic model
     Each plane has an unique ID
     Each plane arrives in random area, on the height between 2 and 5km
-    Each plane arrives with full fuel tank. 
+    Each plane arrives with full fuel tank.
     """
-    plane_id: UUID = Field(default_factory=uuid4, frozen=True) # BUG Apply uuid properly working with different types of database (probably to be implemented in SQLAlchemy model)
+
+    plane_id: UUID = Field(
+        default_factory=uuid4, frozen=True
+    )  # BUG Apply uuid properly working with different types of database (probably to be implemented in SQLAlchemy model)
     x_pos: int = Field(default_factory=lambda: randint(0, 10000))
     y_pos: int = Field(default_factory=lambda: randint(0, 10000))
     z_pos: int = Field(default_factory=lambda: randint(2000, 5000))
     fuel_left: int = 1000
     is_landed: bool = False
 
-class PlaneController():
+
+class PlaneController:
     """Operation logic behind Plane class object behaviour
     Average fuel consumption: #TODO
     Average plane speed: #TODO
@@ -30,6 +33,9 @@ class PlaneController():
 
     def __init__(self, plane: Plane):
         """Generating new plane"""
+        # Lazy import to avoid circular dependency
+        from app.database import Database
+
         self.database = Database()
         self.plane_id = plane.plane_id
         self.x_pos = plane.x_pos
@@ -37,7 +43,6 @@ class PlaneController():
         self.z_pos = plane.z_pos
         self.fuel_left = plane.fuel_left
         self.is_landed = plane.is_landed
-
 
     def __repr__(self) -> str:
         """Method for printing plane info for debugging purposes"""
@@ -48,7 +53,7 @@ class PlaneController():
         Creating new plane (connection) to server and checking plane parameters.
         Adding newly crated plane to database.
         """
-        self.database.add_plane(self)
+        self.database.add_plane(plane)
         connection = Connection()
         with connection.create_connection() as s:
             s.connect((config.network.host, config.network.port))
@@ -61,9 +66,9 @@ class PlaneController():
 if __name__ == "__main__":
     # plane = Plane(client_host=config.network.host, client_port=config.network.port)
     plane = Plane()
-    plane.start_plane()
+    # plane.start_plane()
     while True:
-        plane.move_plane()
+        # plane.move_plane()
         plane.fuel_left -= 1
         print(plane)
         sleep(1)
