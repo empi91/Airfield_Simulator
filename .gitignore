@@ -201,6 +201,12 @@ cython_debug/
 .cursorignore
 .cursorindexingignore
 
+# Copilot
+.github/
+
+# Database
+*.db
+
 # Marimo
 marimo/_static/
 marimo/_lsp/
