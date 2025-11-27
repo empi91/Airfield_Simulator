@@ -22,7 +22,8 @@ class Database:
 
     def check_db_exist(self):
         """Checking if there is already an existing SQlite database and removing it to avoid using old data"""
-        file_path = Path("test_db.db")
+        db_name = config.database.database_engine.split("///")
+        file_path = Path(db_name[1])
         if file_path.exists():
             file_path.unlink(missing_ok=True)
 
@@ -58,8 +59,8 @@ class Database:
         Getting ORM plane model from database
         Updating all ORM fields with values passed to method inside pydantic plane
         """
-        for plane in planes:
-            with self.Session() as session:
+        with self.Session() as session:
+            for plane in planes:
                 orm_plane = (
                     session.query(ORMPlane)
                     .filter(ORMPlane.Plane_id == plane.Plane_id)
@@ -71,7 +72,7 @@ class Database:
                     orm_plane.z_pos = plane.z_pos
                     orm_plane.fuel_left = plane.fuel_left
                     orm_plane.is_landed = plane.is_landed
-                    session.commit()
+            session.commit()
 
     def orm_pydantic_converter(self, plane: PydanticPlane):
         orm_plane: ORMPlane = ORMPlane(
