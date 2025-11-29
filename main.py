@@ -1,8 +1,8 @@
-# from time import sleep
-
 from app.config import config
 from app.connection import Server
-from app.operations import PlaneManager
+from app.services import PlaneManager
+from app.database import Database
+from app.services import TrafficController
 
 
 def main_server():
@@ -11,8 +11,10 @@ def main_server():
 
 
 def main_plane_manager():
-    plane_manager = PlaneManager()
-    plane_manager.prepare_env()
+    db = Database()
+    tc = TrafficController()
+    plane_manager = PlaneManager(db, tc)
+    db.clear_database()
     plane_manager.start_operations()
 
 

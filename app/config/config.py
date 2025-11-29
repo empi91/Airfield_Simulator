@@ -27,6 +27,18 @@ class DatabaseConfig(BaseSettings):
     )
 
 
+class AerospaceConfig(BaseSettings):
+    """Settings and requriements for aerospace"""
+    X_BOUNDARY: int = 10000
+    Y_BOUNDARY: int = 10000
+    MAX_ALTITUDE: int = 5000
+
+
+class PlanesConfig(BaseSettings):
+    """Setting for types of planes"""
+    FUEL_CONSUMPTION_DEFAULT: int = 10
+
+
 class AppConfig(BaseSettings):
     """Managing all configs together"""
 
@@ -36,8 +48,11 @@ class AppConfig(BaseSettings):
         env_file_encoding="utf-8"
     )
 
+
     network: NetworkConfig = Field(default_factory=NetworkConfig)
     database: DatabaseConfig = Field(default_factory=DatabaseConfig)
+    aerospace: AerospaceConfig = Field(default_factory=AerospaceConfig)
+    planes: PlanesConfig = Field(default_factory=PlanesConfig)
 
 
 

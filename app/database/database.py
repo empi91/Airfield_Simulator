@@ -1,5 +1,3 @@
-from pathlib import Path
-
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -20,14 +18,12 @@ class Database:
         # TODO
         return ""
 
-    def check_db_exist(self):
-        """Checking if there is already an existing SQlite database and removing it to avoid using old data"""
-        db_name = config.database.database_engine.split("///")
-        file_path = Path(db_name[1])
-        if file_path.exists():
-            file_path.unlink(missing_ok=True)
+    def clear_database(self):
+        """Clearing all data from database by dropping and recreating tables"""
+        Base.metadata.drop_all(self.engine)
+        Base.metadata.create_all(self.engine)
 
-    def add_plane(self, plane: PydanticPlane) -> int:
+    def add_plane(self, plane: PydanticPlane):
         """
         Adding new plane to database
         Converting pydantic plane model to ORM plane model
@@ -38,9 +34,7 @@ class Database:
             session.add(orm_plane)
             session.commit()
 
-        return 1
-
-    def get_all_planes(self) -> list[PydanticPlane]:
+    def get_all_planes(self) -> list[ORMPlane]:
         """
         Getting all planes data from database
         Converting them back to pydantic models and returning it in a list
@@ -63,7 +57,7 @@ class Database:
             for plane in planes:
                 orm_plane = (
                     session.query(ORMPlane)
-                    .filter(ORMPlane.Plane_id == plane.Plane_id)
+                    .filter(ORMPlane.plane_id == plane.plane_id)
                     .first()
                 )
                 if orm_plane:
@@ -76,7 +70,7 @@ class Database:
 
     def orm_pydantic_converter(self, plane: PydanticPlane):
         orm_plane: ORMPlane = ORMPlane(
-            Plane_id=plane.plane_id,
+            plane_id=plane.plane_id,
             x_pos=plane.x_pos,
             y_pos=plane.y_pos,
             z_pos=plane.z_pos,
