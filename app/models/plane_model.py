@@ -1,4 +1,4 @@
-from sqlalchemy import Integer, Boolean
+from sqlalchemy import Integer, Boolean, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, declarative_base
 
 
@@ -23,3 +23,11 @@ class Plane(Base):
         """Method for printing plane info for debugging purposes"""
         return f"Plane {self.plane_id} \nCurrent position: \nX: {self.x_pos}\nY: {self.y_pos} \nZ: {self.z_pos} \n Fuel left: {self.fuel_left} \nLanded: {self.is_landed}"
 
+
+class Collision(Base):
+    """SQLAlchemy model of collisions table"""
+    __tablename__ = "collision"
+
+    collision_id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    plane_1_id: Mapped[Plane] = mapped_column(Integer, ForeignKey("plane.plane_id"))
+    plane_2_id: Mapped[Plane] = mapped_column(Integer, ForeignKey("plane.plane_id"))

@@ -1,6 +1,7 @@
 from app.schemas import Plane
 from app.services.traffic_controller import TrafficController
 from app.config import config
+from app.exceptions import PlaneOutOfFuelError
 
 class PlaneController:
     """Operation logic behind Plane class object behaviour
@@ -39,3 +40,8 @@ class PlaneController:
         #TODO
         plane: Plane = self.tc.check_plane_movement(plane)
         plane.fuel_left -= config.planes.FUEL_CONSUMPTION_DEFAULT
+        return 1
+
+        if plane.fuel_left <= 0 and plane.z_pos > 0:
+            raise PlaneOutOfFuelError(plane.plane_id)
+            return 0
