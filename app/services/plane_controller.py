@@ -2,6 +2,7 @@ from app.schemas import Plane
 from app.services.traffic_controller import TrafficController
 from app.config import config
 from app.exceptions import PlaneOutOfFuelError
+from app.logger import Logger
 
 class PlaneController:
     """Operation logic behind Plane class object behaviour
@@ -13,6 +14,10 @@ class PlaneController:
         """Generating new plane"""
         self.plane = plane
         self.tc = traffic_controller
+        self.logger = Logger()
+        self.plane_controller_logger =  self.logger.get_logger(
+            "plane_controller", ["console", "file"], "DEBUG"
+        )
 
     def __repr__(self) -> str:
         """Method for printing plane info for debugging purposes"""
@@ -39,9 +44,10 @@ class PlaneController:
         """
         #TODO
         plane: Plane = self.tc.check_plane_movement(plane)
+        self.plane_controller_logger.debug(f"Plane {plane.plane_id} moved.")
         plane.fuel_left -= config.planes.FUEL_CONSUMPTION_DEFAULT
-        return 1
 
         if plane.fuel_left <= 0 and plane.z_pos > 0:
             raise PlaneOutOfFuelError(plane.plane_id)
-            return 0
+
+        return 1

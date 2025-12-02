@@ -1,9 +1,8 @@
 from app.config import config
 from app.connection import Server
-from app.services import PlaneManager
 from app.database import Database
-from app.services import TrafficController
 from app.logger import Logger
+from app.services import PlaneManager, TrafficController
 
 
 def main_server():
@@ -13,7 +12,7 @@ def main_server():
 
 def main_plane_manager():
     logger = Logger()
-    main_logger = logger.get_logger("main_logger")
+    main_logger = logger.get_logger("main_logger", ["file"], "DEBUG")
     main_logger.debug("Starting program")
     db = Database()
     tc = TrafficController()

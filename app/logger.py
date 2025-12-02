@@ -6,8 +6,8 @@ import sys
 FORMATTER = logging.Formatter("%(asctime)s — %(name)s — %(levelname)s — %(message)s")
 LOG_FILE = "log.log"
 
-class Logger:
 
+class Logger:
     def get_console_handler(self):
         console_handler = logging.StreamHandler(sys.stdout)
         console_handler.setFormatter(FORMATTER)
@@ -18,12 +18,18 @@ class Logger:
         file_handler.setFormatter(FORMATTER)
         return file_handler
 
-    def get_logger(self, logger_name):
+    def get_logger(self, logger_name: str, handler_type: list[str], level: str):
         logger = logging.getLogger(logger_name)
-        logger.setLevel(logging.DEBUG)
-        logger.addHandler(self.get_console_handler())
-        logger.addHandler(self.get_file_handler())
+
+        logger_level = getattr(logging, level)
+        logger.setLevel(logger_level)
+
+        # Only add handlers if the logger doesn't have any yet
+        if not logger.handlers:
+            if "console" in handler_type:
+                logger.addHandler(self.get_console_handler())
+            if "file" in handler_type:
+                logger.addHandler(self.get_file_handler())
+
         logger.propagate = False
         return logger
-
-
