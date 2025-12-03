@@ -24,7 +24,6 @@ class Logger:
         logger_level = getattr(logging, level)
         logger.setLevel(logger_level)
 
-        # Only add handlers if the logger doesn't have any yet
         if not logger.handlers:
             if "console" in handler_type:
                 logger.addHandler(self.get_console_handler())

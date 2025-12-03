@@ -2,7 +2,7 @@ from random import randint
 # from uuid import UUID, uuid4
 
 from pydantic import BaseModel, Field, ConfigDict
-from app.config import config
+from app.utils.config import config
 
 
 class Plane(BaseModel):

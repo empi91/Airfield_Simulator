@@ -1,8 +1,8 @@
 from random import randint
 
-from app.config import config
-from app.logger import Logger
 from app.schemas import Plane
+from app.utils.config import config
+from app.utils.logger import Logger
 
 
 class TrafficController:

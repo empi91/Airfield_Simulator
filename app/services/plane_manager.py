@@ -7,8 +7,8 @@ from pydantic import ValidationError
 from sqlalchemy.exc import SQLAlchemyError
 
 from app.database import Database
-from app.exceptions import PlaneOutOfFuelError
-from app.logger import Logger
+from app.utils.exceptions import PlaneOutOfFuelError
+from app.utils.logger import Logger
 from app.models import Plane as ORMPlane
 from app.schemas import Plane
 from app.services.plane_controller import PlaneController
@@ -21,16 +21,13 @@ class PlaneManager:
         self.tc = traffic_controller
         self.logger = Logger()
         self.plane_mngr_logger = self.logger.get_logger(
-            "plane_manager", ["console", "file"], "DEBUG"
+            "plane_manager", ["file"], "DEBUG"
         )
 
     def __repr__(self) -> str:
         return ""
 
     def start_operations(self):
-        # self.plane_mngr_logger = logger.get_logger(
-        #     "plane_manager", ["console", "file"], "DEBUG"
-        # )
         planes: list[Plane] = []
 
         """Creating 5 new planes and adding them to database as ORM models"""

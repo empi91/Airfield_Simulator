@@ -1,7 +1,5 @@
-from sqlalchemy import Integer, Boolean, ForeignKey
-from sqlalchemy.orm import Mapped, mapped_column, declarative_base
-
-
+from sqlalchemy import Boolean, ForeignKey, Integer
+from sqlalchemy.orm import Mapped, declarative_base, mapped_column
 
 Base = declarative_base()
 
@@ -10,6 +8,7 @@ Base = declarative_base()
 
 class Plane(Base):
     """SQLAlchemy Plane model"""
+
     __tablename__ = "plane"
 
     plane_id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
@@ -21,13 +20,16 @@ class Plane(Base):
 
     def __repr__(self) -> str:
         """Method for printing plane info for debugging purposes"""
-        return f"Plane {self.plane_id} \nCurrent position: \nX: {self.x_pos}\nY: {self.y_pos} \nZ: {self.z_pos} \n Fuel left: {self.fuel_left} \nLanded: {self.is_landed}"
+        return f"Plane {self.plane_id} \nCurrent position: \nX: {self.x_pos};  Y: {self.y_pos};  Z: {self.z_pos} \nFuel left: {self.fuel_left} \nLanded: {self.is_landed}"
 
 
 class Collision(Base):
     """SQLAlchemy model of collisions table"""
+
     __tablename__ = "collision"
 
-    collision_id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    collision_id: Mapped[int] = mapped_column(
+        Integer, primary_key=True, autoincrement=True
+    )
     plane_1_id: Mapped[Plane] = mapped_column(Integer, ForeignKey("plane.plane_id"))
     plane_2_id: Mapped[Plane] = mapped_column(Integer, ForeignKey("plane.plane_id"))

@@ -1,7 +1,7 @@
-from app.config import config
+from app.utils.config import config
 from app.connection import Server
 from app.database import Database
-from app.logger import Logger
+from app.utils.logger import Logger
 from app.services import PlaneManager, TrafficController
 
 

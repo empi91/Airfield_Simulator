@@ -3,7 +3,7 @@ from errno import EPIPE
 
 from pydantic import BaseModel
 
-from app.config.config import config
+from app.utils.config import config
 from app.connection.connection import Connection
 
 

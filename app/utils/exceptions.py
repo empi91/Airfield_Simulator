@@ -1,6 +1,6 @@
 """Custom exceptions for the project"""
 
-from app.logger import Logger
+from app.utils.logger import Logger
 
 
 class AirfieldSimulatorError(Exception):

@@ -2,7 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.exc import IntegrityError, OperationalError, SQLAlchemyError
 
-from app.config import config
+from app.utils.config import config
 from app.models import Base
 from app.models import Plane as ORMPlane
 from app.schemas import Plane as PydanticPlane
