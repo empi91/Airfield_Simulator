@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from io import RawIOBase
 from time import sleep
 
 from pydantic import ValidationError
@@ -64,17 +63,15 @@ class PlaneManager:
                         plane_controller.move_plane(plane_controller.plane)
                     except PlaneOutOfFuelError as e:
                         print(f"Plane {e.plane_id} crashed due to no fuel")
+                        #TODO Remove plane from DB, add +1 to collision counter
 
                 self.db.update_planes(orm_planes)
                 sleep(10)
             except ValidationError as e:
                 self.plane_mngr_logger.error(f"Validation Error: {e}")
                 raise
-                
-                print(f"Pydantic Validation Error: {e}")
             except SQLAlchemyError as e:
                 self.plane_mngr_logger.error(f"SQLAlchemy Error: {e}")
-                RawIOBase
 
     def connect_planes(self):
         # TODO

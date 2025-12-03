@@ -9,10 +9,11 @@ from app.schemas import Plane as PydanticPlane
 
 
 class Database:
+    DB_ENGINE = config.database.database_engine
     def __init__(self):
         """Declaration of database object, used for all database operations"""
         # self.engine = create_engine(config.database.database_engine, echo=True) #TODO Move to echo=True when logging is ready, due to massive size of logs generated
-        self.engine = create_engine(config.database.database_engine)
+        self.engine = create_engine(self.DB_ENGINE)
         Base.metadata.create_all(self.engine)
         self.Session = sessionmaker(bind=self.engine)
 
@@ -99,3 +100,6 @@ class Database:
         )
 
         return orm_plane
+
+    def close(self):
+        self.engine.dispose()
