@@ -22,4 +22,5 @@ def main_plane_manager():
 
 
 if __name__ == "__main__":
-    main_plane_manager()
+    # main_plane_manager()
+    main_server()
