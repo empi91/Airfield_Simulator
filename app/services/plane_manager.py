@@ -27,23 +27,17 @@ class PlaneManager:
         return ""
 
     def start_operations(self):
-        planes: list[Plane] = []
-
-        """Creating 5 new planes and adding them to database as ORM models"""
-        for _ in range(5):
-            try:
-                plane = Plane()
-                planes.append(plane)
-                self.plane_mngr_logger.debug("New plane added to list")
-            except ValidationError as e:
-                self.plane_mngr_logger.error(f"Validation Error: {e}")
-                raise
         try:
-            for plane in planes:
-                self.db.add_plane(plane)
+            plane_controller = PlaneController(Plane(), self.tc)
+            self.db.add_plane(plane_controller.plane)
+            self.plane_mngr_logger.debug("New plane added to list")
+        except ValidationError as e:
+            self.plane_mngr_logger.error(f"Validation Error: {e}")
+            raise
         except SQLAlchemyError as e:
             self.plane_mngr_logger.error(f"SQLAlchemy Error: {e}")
             raise
+
 
         """Getting all planes from database, converting to pydantic (automatically), move them and save back to database"""
         while True:

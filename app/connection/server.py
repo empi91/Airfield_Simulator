@@ -1,16 +1,20 @@
 from datetime import datetime
 from errno import EPIPE
 
-from pydantic import BaseModel
-
-from app.utils.config import config
 from app.connection.connection import Connection
+from app.utils.config import config
+from app.utils.logger import Logger
 
 
-class Server(BaseModel):
-    server_start_time: datetime = datetime.now()
-    server_host: str
-    server_port: int
+class Server():
+    def __init__(self, server_host: str, server_port: int):
+        self.server_host = server_host
+        self.server_port = server_port
+        self.server_start_time: datetime = datetime.now()
+        self.logger = Logger()
+        self.server_logger = self.logger.get_logger(
+            "server_logger", ["console"], "DEBUG"
+        )
 
     def __repr__(self) -> str:
         return f"Server is running for {datetime.now() - self.server_start_time} with the following configuration: \nHOST: {self.server_host} \nPORT: {self.server_port}"
@@ -21,12 +25,11 @@ class Server(BaseModel):
         with connection.create_connection(is_server=True) as s:
             s.bind((self.server_host, self.server_port))
             s.listen(config.network.max_connections)
-            print("Server online")  # ADDFEATURE add it to logging
-            print(f"Server: {self}")
+            self.server_logger.info(f"Server online: {self}")
 
             conn, addr = s.accept()
             with conn:
-                print(f"Client connected: {addr}")  # ADDFEATURE Add to logging
+                self.server_logger.info(f"Client connected: {addr}")
                 while True:
                     # TODO Do something with each connected client (plane)
 

@@ -6,7 +6,7 @@ from app.services import PlaneManager, TrafficController
 
 
 def main_server():
-    server = Server(server_host=config.network.host, server_port=config.network.port)
+    server = Server(config.network.host, config.network.port)
     server.start_server()
 
 

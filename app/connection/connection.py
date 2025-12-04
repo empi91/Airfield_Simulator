@@ -1,5 +1,7 @@
 import socket
 
+from app.utils.logger import Logger
+
 class Connection():
     """Manages socket connections for client-server communication.
 
@@ -9,6 +11,8 @@ class Connection():
 
     def __init__(self):
         self.socket = None
+        self.logger = Logger()
+        self.connection_logger = self.logger.get_logger("connection_logged", ["console"], "DEBUG")
 
     def create_connection(self, is_server=False):
         """Create and configure a socket connection.
@@ -26,12 +30,10 @@ class Connection():
         try:
             self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             if is_server:
-                if self.socket is not None:
-                    self.socket.close()
                 self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
             return self.socket
-        except socket.error as s:
-            print(f"[SOCKET ERROR]: {s}") #ADDFEATURE Add to logging
+        except socket.error as e:
+            self.connection_logger.error(f"Socket Connection Error: {e}")
             return None
 
     def close(self):
