@@ -29,12 +29,15 @@ class PlaneController:
     def connect_plane(self):
         """Connecting created plane to the server"""
         connection = Connection()
-        with connection.create_connection() as s:
-            s.connect((config.network.host, config.network.port))
+        try:
+            with connection.create_connection() as s:
+                s.connect((config.network.host, config.network.port))
 
-            self.plane_controller_logger.info(
-                f"Plane {self.plane.plane_id} connected to server."
-            )
+                self.plane_controller_logger.info(
+                    f"Plane {self.plane.plane_id} connected to server."
+                )
+        except ConnectionRefusedError as e:
+            self.plane_controller_logger.warning(f"Connection with server lost: {e}")
 
     def move_plane(self, plane: Plane):
         """Moving plane in 3D space, using fuel and avoiding colisions

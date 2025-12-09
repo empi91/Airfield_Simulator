@@ -29,28 +29,27 @@ class Server:
             s.bind((self.server_host, self.server_port))
             s.listen(config.network.max_connections)
             self.server_logger.info(f"Server online: {self}")
+            try:
+                conn, addr = s.accept()
+                with conn:
+                    self.server_logger.info(f"Client connected: {addr}")
+                    while True:
+                        # TODO For each connected plane assign a separate thread so that it can stayed connected together with other planes.
+                        # rec_mess = conn.recv(1024).decode("utf-8")
+                        # if not rec_mess:
+                        #     break
+                        try:
+                            planes = self.db.get_all_planes()
+                            for plane in planes:
+                                print(
+                                    f"{plane.plane_id} | {plane.x_pos} | {plane.y_pos} | {plane.z_pos} | {plane.fuel_left} | {plane.is_landed} "
+                                )
+                                print(2 * "-")
+                                sleep(2)
 
-            conn, addr = s.accept()
-            with conn:
-                self.server_logger.info(f"Client connected: {addr}")
-                while True:
-                    # TODO For each connected plane assign a separate thread so that it can stayed connected together with other planes.
-                    # rec_mess = conn.recv(1024).decode("utf-8")
-                    # if not rec_mess:
-                    #     break
-                    try:
-                        planes = self.db.get_all_planes()
-                        for plane in planes:
-                            print(
-                                f"{plane.plane_id} | {plane.x_pos} | {plane.y_pos} | {plane.z_pos} | {plane.fuel_left} | {plane.is_landed} "
-                            )
-                            print(2*"-")
-                            sleep(2)
-
-                    except KeyboardInterrupt:
-                        self.server_logger.info("Server shutting down")
-
-                    except IOError as e:
-                        if e.errno == EPIPE:
-                            print("[ERROR] Broken pipe error")
-                            break
+                        except IOError as e:
+                            if e.errno == EPIPE:
+                                print("[ERROR] Broken pipe error")
+                                break
+            except KeyboardInterrupt:
+                self.server_logger.info("Server shutting down")
