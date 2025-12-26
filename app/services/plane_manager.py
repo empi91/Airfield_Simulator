@@ -60,7 +60,7 @@ class PlaneManager:
                         #TODO Remove plane from DB, add +1 to collision counter
 
                 self.db.update_planes(orm_planes)
-                sleep(10)
+                sleep(1)
             except ValidationError as e:
                 self.plane_mngr_logger.error(f"Validation Error: {e}")
                 raise

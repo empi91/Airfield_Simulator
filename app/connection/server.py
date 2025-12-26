@@ -6,7 +6,6 @@ from app.connection.connection import Connection
 from app.database import Database
 from app.utils.config import config
 from app.utils.logger import Logger
-from app.visualisation.airport_space import PlanePlot
 
 
 class Server:
@@ -34,19 +33,13 @@ class Server:
                 conn, addr = s.accept()
                 with conn:
                     self.server_logger.info(f"Client connected: {addr}")
+
                     while True:
                         # TODO For each connected plane assign a separate thread so that it can stayed connected together with other planes.
                         # rec_mess = conn.recv(1024).decode("utf-8")
                         # if not rec_mess:
                         #     break
                         try:
-                            plane_dict = {
-                                "plane_id": [],
-                                "x": [],
-                                "y": [],
-                                "z": [],
-                                "fuel": [],
-                            }
                             planes = self.db.get_all_planes()
 
                             for plane in planes:
@@ -54,14 +47,8 @@ class Server:
                                     f"{plane.plane_id} | {plane.x_pos} | {plane.y_pos} | {plane.z_pos} | {plane.fuel_left} | {plane.is_landed} "
                                 )
                                 print(2 * "-")
-                                plane_dict["plane_id"].append(plane.plane_id)
-                                plane_dict["x"].append(plane.x_pos)
-                                plane_dict["y"].append(plane.y_pos)
-                                plane_dict["z"].append(plane.z_pos)
-                                plane_dict["fuel"].append(plane.fuel_left)
 
-                            plot = PlanePlot(plane_dict)
-                            sleep(10)
+                            sleep(1)
 
                         except IOError as e:
                             if e.errno == EPIPE:

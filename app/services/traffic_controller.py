@@ -16,9 +16,9 @@ class TrafficController:
         return ""
 
     def check_plane_movement(self, plane: Plane) -> Plane:
-        plane.x_pos += randint(-10, 10)
-        plane.y_pos += randint(-10, 10)
-        plane.z_pos += randint(-10, 10)
+        plane.x_pos += randint(-30, 30)
+        plane.y_pos += randint(-30, 30)
+        plane.z_pos += randint(-30, 30)
 
         plane.x_pos = max(0, min(config.aerospace.X_BOUNDARY, plane.x_pos))
         plane.y_pos = max(0, min(config.aerospace.Y_BOUNDARY, plane.y_pos))

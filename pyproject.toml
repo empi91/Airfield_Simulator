@@ -6,6 +6,8 @@ readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
     "cufflinks>=0.17.3",
+    "dash>=3.3.0",
+    "panda>=0.3.1",
     "plotly>=6.5.0",
     "pydantic>=2.12.3",
     "pydantic-settings>=2.12.0",
